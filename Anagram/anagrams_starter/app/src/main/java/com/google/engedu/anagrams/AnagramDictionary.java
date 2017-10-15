@@ -35,15 +35,23 @@ public class AnagramDictionary {
 //    public
     private Random random = new Random();
 
+
     public AnagramDictionary(Reader reader) throws IOException {
         wordSet = new HashSet<String>();
         lettersToWord = new HashMap<String, ArrayList<String>>();
         wordList = new ArrayList<String>();
         BufferedReader in = new BufferedReader(reader);
         String line;
+
+//        The following while loop will take words from the word.txt(The dictionary of words) and put it in a suitable data structure.
+
         while((line = in.readLine()) != null) {
             String word = line.trim();
             if(word.length() <= MAX_WORD_LENGTH && word.length() >=DEFAULT_WORD_LENGTH){
+
+//        Here we are using a HASHSET. wordSet is a hashset contains all the words so as to avoid any sort of repeatition of
+                wordSet.add(word);
+
                 if(!lettersToWord.containsKey(sortLetter(word))) {
                     lettersToWord.put(sortLetter(word), new ArrayList<String>());
                 }
@@ -61,7 +69,20 @@ public class AnagramDictionary {
     }
 
     public boolean isGoodWord(String word, String base) {
-        return true;
+
+        if(validWord(word) && !(word.contains(base))){
+            return true;
+        }
+        return false;
+    }
+
+    boolean validWord(String word){
+        for(String letter:wordSet){
+            if(letter.contentEquals(word)){
+                return true;
+            }
+        }
+        return false;
     }
 
 //    The following function generates a list of anagrams that can be found in the given Dictionary for the Random Word given to the user.
@@ -101,6 +122,7 @@ public class AnagramDictionary {
 
     public List<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
+        result = lettersToWord.get(sortLetter(word));
         return result;
     }
 
