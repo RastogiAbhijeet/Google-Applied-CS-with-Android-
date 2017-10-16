@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.Map;
 public class AnagramDictionary {
 
     private static final int MIN_NUM_ANAGRAMS = 5;
@@ -123,11 +124,28 @@ public class AnagramDictionary {
     public List<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
         result = lettersToWord.get(sortLetter(word));
+
+        for(Map.Entry me : lettersToWord.entrySet()) {
+            String S = sortLetter(me.getKey().toString());
+            if(S.length() == (sortLetter(word).length()+1)){
+                if(characterComparison(S, sortLetter(word))){
+
+                }
+            }
+        }
         return result;
+    }
+
+    public boolean characterComparison(String sChar, String word){
+        int f
+        for(int i = 0 ;i<word.length();i++){
+            sChar.charAt(i)
+        }
     }
 
     public String pickGoodStarterWord() {
         return "stop";
     }
+
 }
 
