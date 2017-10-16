@@ -24,6 +24,7 @@ import java.util.Random;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Map;
+
 public class AnagramDictionary {
 
     private static final int MIN_NUM_ANAGRAMS = 5;
@@ -35,7 +36,6 @@ public class AnagramDictionary {
 
 //    public
     private Random random = new Random();
-
 
     public AnagramDictionary(Reader reader) throws IOException {
         wordSet = new HashSet<String>();
@@ -51,7 +51,7 @@ public class AnagramDictionary {
             if(word.length() <= MAX_WORD_LENGTH && word.length() >=DEFAULT_WORD_LENGTH){
 
 //        Here we are using a HASHSET. wordSet is a hashset contains all the words so as to avoid any sort of repeatition of
-                wordSet.add(word);
+                wordList.add(word);
 
                 if(!lettersToWord.containsKey(sortLetter(word))) {
                     lettersToWord.put(sortLetter(word), new ArrayList<String>());
@@ -77,8 +77,8 @@ public class AnagramDictionary {
         return false;
     }
 
-    boolean validWord(String word){
-        for(String letter:wordSet){
+    public boolean validWord(String word){
+        for(String letter:wordList){
             if(letter.contentEquals(word)){
                 return true;
             }
@@ -129,23 +129,65 @@ public class AnagramDictionary {
             String S = sortLetter(me.getKey().toString());
             if(S.length() == (sortLetter(word).length()+1)){
                 if(characterComparison(S, sortLetter(word))){
+                    for(String m: lettersToWord.get(S)) {
 
+                        char c = uniqueChar(S, sortLetter(word));
+                        if(m.charAt(0) != c && m.charAt(S.length()-1) != c) {
+                            result.add(m);
+                        }
+                    }
                 }
             }
         }
+
         return result;
     }
 
-    public boolean characterComparison(String sChar, String word){
-        int f
-        for(int i = 0 ;i<word.length();i++){
-            sChar.charAt(i)
+    public char uniqueChar(String S, String word){
+        char ch;
+        int i=0,j = 0;
+
+        while(i<word.length()) {
+            if (word.charAt(i) != S.charAt(j)) {
+                ch = S.charAt(j);
+               return ch;
+            }else{
+                i += 1;
+                j += 1;
+            }
         }
+        return ' ';
+    }
+
+    public boolean characterComparison(String sChar, String word){
+        int flag = 0;
+        int i=0,j = 0;
+
+        while(i<word.length()){
+            if(word.charAt(i) != sChar.charAt(j)){
+                j = i+1;
+                flag+=1;
+                if(flag>1){
+                    return false;
+                }
+            }else{
+                i+=1;
+                j+=1;
+
+            }
+        }
+        return true;
     }
 
     public String pickGoodStarterWord() {
-        return "stop";
-    }
+        int index = random.nextInt(wordList.size()-1);
+        int minNumber = lettersToWord.get(sortLetter(wordList.get(index))).size();
 
+        if(minNumber >= MIN_NUM_ANAGRAMS){
+            return wordList.get(index);
+        }else{
+            return pickGoodStarterWord();
+        }
+    }
 }
 
