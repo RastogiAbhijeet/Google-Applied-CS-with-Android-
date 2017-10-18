@@ -7,14 +7,14 @@
     tools:context="com.example.hp.scarnedice.MainActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/userScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:text=" Your Score : "
+        android:text=" Your Score : 0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.143"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -23,20 +23,17 @@
         app:layout_constraintVertical_bias="0.064" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/compScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Computer Score : "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.696"
-        app:layout_constraintLeft_toRightOf="@+id/textView"
+        android:layout_marginTop="39dp"
+        android:text="Computer Score : 0"
+        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintLeft_toRightOf="@+id/userScore"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.064" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
