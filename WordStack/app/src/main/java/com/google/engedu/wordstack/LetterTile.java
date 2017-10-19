@@ -25,20 +25,20 @@ import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class LetterTile extends TextView {
+public class LetterTile extends android.support.v7.widget.AppCompatTextView {
 
     public static final int TILE_SIZE = 150;
     private Character letter;
     private boolean frozen;
 
-    public LetterTile(Context context, Character letter) {
+    public LetterTile(Context context, Character letters) {
         super(context);
-        this.letter = letter;
+        this.letter = letters;
         setText(letter.toString());
         setTextAlignment(TEXT_ALIGNMENT_CENTER);
         setHeight(TILE_SIZE);
         setWidth(TILE_SIZE);
-        setTextSize(30);
+        setTextSize(15);
         setBackgroundColor(Color.rgb(255, 255, 200));
     }
 

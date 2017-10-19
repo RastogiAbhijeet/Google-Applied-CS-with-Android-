@@ -37,13 +37,14 @@ import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int WORD_LENGTH = 5;
+    private static final int WORD_LENGTH = 3;
     public static final int LIGHT_BLUE = Color.rgb(176, 200, 255);
     public static final int LIGHT_GREEN = Color.rgb(200, 255, 200);
     private ArrayList<String> words = new ArrayList<>();
     private Random random = new Random();
     private StackedLayout stackedLayout;
     private String word1, word2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +57,9 @@ public class MainActivity extends AppCompatActivity {
             String line = null;
             while((line = in.readLine()) != null) {
                 String word = line.trim();
-                /**
-                 **
-                 **  YOUR CODE GOES HERE
-                 **
-                 **/
+                if(word.length()>=WORD_LENGTH && word.length()<=5){
+                    words.add(word);
+                }
             }
         } catch (IOException e) {
             Toast toast = Toast.makeText(this, "Could not load dictionary", Toast.LENGTH_LONG);
@@ -72,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         View word1LinearLayout = findViewById(R.id.word1);
         word1LinearLayout.setOnTouchListener(new TouchListener());
+
         //word1LinearLayout.setOnDragListener(new DragListener());
         View word2LinearLayout = findViewById(R.id.word2);
         word2LinearLayout.setOnTouchListener(new TouchListener());
@@ -141,14 +141,59 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onStartGame(View view) {
+        stackedLayout.removeAllViews();
+        stackedLayout.clear();
+
+        LinearLayout word1LinearLayout = (LinearLayout) findViewById(R.id.word1);
+        word1LinearLayout.removeAllViews();
+        LinearLayout word2LinearLayout = (LinearLayout) findViewById(R.id.word2);
+        word2LinearLayout.removeAllViews();
+
+
         TextView messageBox = (TextView) findViewById(R.id.message_box);
         messageBox.setText("Game started");
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+        int index = random.nextInt(words.size());
+        word1 = words.get(index);
+        index = random.nextInt(words.size());
+        word2 = words.get(index);
+        String scrambledLetters = scramble();
+        messageBox.setText(scrambledLetters);
+
+        LetterTile obj[] = new LetterTile[scrambledLetters.length()];
+        for(int i=0; i < scrambledLetters.length();i++){
+            obj[i] = new LetterTile(this, scrambledLetters.charAt(i));
+        }
+
+
+        for(int j = 0;j<scrambledLetters.length();j++){
+            stackedLayout.push(obj[scrambledLetters.length()-j-1]);
+        }
         return true;
+    }
+
+
+    // Function that is going to scramble the words
+    public String scramble(){
+        Random rand = new Random();
+        int counter1 = 0, counter2 = 0;
+        int size = word1.length()+word2.length();
+        char str[] = new char[size];
+        int counter = 0;
+
+        while(counter < size){
+            int index = rand.nextInt(2);
+            if(index == 0 && counter1<word1.length()){
+                str[counter] = word1.charAt(counter1);
+                counter1 +=1;
+                counter+=1;
+            }else if(index == 1 && counter2 <word2.length()){
+                str[counter] = word2.charAt(counter2);
+                counter2 +=1;
+                counter+=1;
+            }
+        }
+
+        return String.valueOf(str);
     }
 
     public boolean onUndo(View view) {
