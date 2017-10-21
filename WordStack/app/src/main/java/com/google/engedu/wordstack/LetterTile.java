@@ -31,6 +31,7 @@ public class LetterTile extends android.support.v7.widget.AppCompatTextView {
     private Character letter;
     private boolean frozen;
 
+//    Changes Made
     public LetterTile(Context context, Character letters) {
         super(context);
         this.letter = letters;
@@ -68,11 +69,12 @@ public class LetterTile extends android.support.v7.widget.AppCompatTextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+        if(!frozen && motionEvent.getAction()==MotionEvent.ACTION_DOWN){
+            startDrag(ClipData.newPlainText("",""),new View.DragShadowBuilder(this), this, 0);
+            return true;
+        }else if(frozen && motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+            startDrag(ClipData.newPlainText("",""), new View.DragShadowBuilder(this),this, 0);
+        }
         return super.onTouchEvent(motionEvent);
     }
 }

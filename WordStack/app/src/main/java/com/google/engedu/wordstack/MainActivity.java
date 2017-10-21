@@ -23,6 +23,7 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private Random random = new Random();
     private StackedLayout stackedLayout;
     private String word1, word2;
+    public Stack<LetterTile> placedTile = new Stack<>();
 
 
     @Override
@@ -70,20 +72,22 @@ public class MainActivity extends AppCompatActivity {
         verticalLayout.addView(stackedLayout, 3);
 
         View word1LinearLayout = findViewById(R.id.word1);
-        word1LinearLayout.setOnTouchListener(new TouchListener());
+//        word1LinearLayout.setOnTouchListener(new TouchListener());
 
-        //word1LinearLayout.setOnDragListener(new DragListener());
+        word1LinearLayout.setOnDragListener(new DragListener());
         View word2LinearLayout = findViewById(R.id.word2);
-        word2LinearLayout.setOnTouchListener(new TouchListener());
-        //word2LinearLayout.setOnDragListener(new DragListener());
+//        word2LinearLayout.setOnTouchListener(new TouchListener());
+        word2LinearLayout.setOnDragListener(new DragListener());
     }
+
 
     private class TouchListener implements View.OnTouchListener {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN && !stackedLayout.empty()) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !stackedLayout.empty()){
                 LetterTile tile = (LetterTile) stackedLayout.peek();
+                placedTile.push(tile);
                 tile.moveToViewGroup((ViewGroup) v);
                 if (stackedLayout.empty()) {
                     TextView messageBox = (TextView) findViewById(R.id.message_box);
@@ -124,22 +128,21 @@ public class MainActivity extends AppCompatActivity {
                 case DragEvent.ACTION_DROP:
                     // Dropped, reassign Tile to the target Layout
                     LetterTile tile = (LetterTile) event.getLocalState();
+                    placedTile.push(tile);
+
                     tile.moveToViewGroup((ViewGroup) v);
                     if (stackedLayout.empty()) {
                         TextView messageBox = (TextView) findViewById(R.id.message_box);
                         messageBox.setText(word1 + " " + word2);
                     }
-                    /**
-                     **
-                     **  YOUR CODE GOES HERE
-                     **
-                     **/
+
                     return true;
             }
             return false;
         }
     }
 
+    // CHANGES MADE.
     public boolean onStartGame(View view) {
         stackedLayout.removeAllViews();
         stackedLayout.clear();
@@ -171,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
+//    Changes Made
     // Function that is going to scramble the words
     public String scramble(){
         Random rand = new Random();
@@ -196,12 +199,19 @@ public class MainActivity extends AppCompatActivity {
         return String.valueOf(str);
     }
 
+
+// Changes Made
     public boolean onUndo(View view) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+
+        LetterTile tile = (LetterTile)placedTile.pop();
+        ViewParent v = tile.getParent();
+        ViewGroup g = (ViewGroup)v ;
+        g.removeView(tile);
+        stackedLayout.push(tile);
+        tile.unfreeze();
+
         return true;
     }
 }
+
+
